@@ -119,7 +119,7 @@ const DeckBuilder: FC = () => {
             >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h5">{`Deck (${builder.deck.length}/40)`}</Typography>
+            <Typography variant="h5">{`${builder.id} (${builder.deck.length}/40)`}</Typography>
           </Box>
           <Button
             variant="contained"
