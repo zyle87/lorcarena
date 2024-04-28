@@ -45,12 +45,12 @@ const DeckBuilder: FC = () => {
 
     let setIndex = Math.floor(Math.random() * builder.sets.length)
     let setNum = builder.sets[setIndex]
-    let cardNum = Math.floor(Math.random() * 34 + 1 + inkIndex * 34)
+    let cardNum = inkIndex * 34 + Math.floor(Math.random() * 34) + 1
 
     while (cardIsInDraftOrDeck(setNum, cardNum)) {
       setIndex = Math.floor(Math.random() * builder.sets.length)
       setNum = builder.sets[setIndex]
-      cardNum = Math.floor(Math.random() * 34 + 1 + inkIndex * 34)
+      cardNum = inkIndex * 34 + Math.floor(Math.random() * 34) + 1
     }
 
     const response = await axios.get<Card[]>(
@@ -140,7 +140,7 @@ const DeckBuilder: FC = () => {
           <Paper
             sx={{
               padding: 2,
-              mb: 4,
+              mb: 2,
               mt: 4
             }}
           >
@@ -163,6 +163,10 @@ const DeckBuilder: FC = () => {
                       <Button
                         key={index}
                         onClick={() => {
+                          if (builder.draft.length !== 3) {
+                            return
+                          }
+
                           dispatch(builderActions.addCardToDeck(card))
                           dispatch(builderActions.clearDraft())
                         }}
@@ -210,7 +214,7 @@ const DeckBuilder: FC = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 4,
+            marginBottom: 2,
             padding: 2
           }}
         >
@@ -231,11 +235,12 @@ const DeckBuilder: FC = () => {
                 height: '100%',
                 objectFit: 'cover',
                 position: 'absolute',
-                mixBlendMode: 'darken'
+                mixBlendMode: 'darken',
+                filter: 'grayscale(1) contrast(2)'
               }}
             >
               <source
-                src="https://static.videezy.com/system/resources/previews/000/015/284/original/white_ink_02.mp4"
+                src="https://static.videezy.com/system/resources/previews/000/036/612/original/18_010_07.mp4"
                 type="video/mp4"
               />
             </video>
@@ -243,7 +248,8 @@ const DeckBuilder: FC = () => {
               sx={{
                 flexGrow: 1,
                 display: 'flex',
-                alignItems: 'flex-end'
+                alignItems: 'flex-end',
+                mx: -0.5
               }}
             >
               {Array.from({ length: 11 }).map((_, index) => {
@@ -253,7 +259,7 @@ const DeckBuilder: FC = () => {
                       key={index}
                       percent={0}
                       cost={index}
-                      length={0}
+                      total={0}
                     ></Column>
                   )
                 }
@@ -268,14 +274,14 @@ const DeckBuilder: FC = () => {
                     key={index}
                     percent={percent}
                     cost={index}
-                    length={cards.length}
+                    total={cards.length}
                   ></Column>
                 )
               })}
             </Box>
           </Box>
         </Paper>
-        <Box sx={{ display: 'flex', mb: 4 }}>
+        <Box sx={{ display: 'flex', mb: 2 }}>
           <Paper
             sx={{
               padding: 2,

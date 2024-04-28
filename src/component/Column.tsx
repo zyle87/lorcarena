@@ -5,17 +5,19 @@ import { FC } from 'react'
 type Props = {
   percent: number
   cost: number
-  length: number
+  total: number
 }
 
-const Column: FC<Props> = ({ percent, cost, length }) => {
+const Column: FC<Props> = ({ percent, cost, total }) => {
   return (
     <Box
       sx={{
         width: '100%',
+        background: 'white',
         height: percent + '%',
-        background: '#ffe4b8',
         borderRadius: 1,
+        display: 'flex',
+        justifyContent: 'center',
         ml: 0.25,
         mr: 0.25
       }}
@@ -38,7 +40,8 @@ const Column: FC<Props> = ({ percent, cost, length }) => {
               width: '100%',
               height: 48,
               textAlign: 'center',
-              fontWeight: 800
+              fontWeight: 800,
+              mixBlendMode: 'difference'
             }}
           >
             {cost}
@@ -46,27 +49,23 @@ const Column: FC<Props> = ({ percent, cost, length }) => {
           <img
             src="https://static.dotgg.gg/lorcana/generic/icon_ink_0.svg"
             alt={'inkable'}
-            style={{ height: 48, width: 48 }}
+            style={{ height: 48, width: 48, mixBlendMode: 'lighten' }}
           />
         </Box>
-        <Typography
-          sx={{
-            textAlign: 'center',
-            position: 'absolute',
-            fontWeight: 'bold',
-            bottom: 64
-          }}
-          variant="h5"
-        >
-          {length ?? 0}
-        </Typography>
-        <Box
-          sx={{
-            height: `${percent}%`,
-            width: '100%'
-          }}
-        ></Box>
       </Box>
+      <Typography
+        sx={{
+          textAlign: 'center',
+          position: 'absolute',
+          fontWeight: 'bold',
+          mixBlendMode: 'difference',
+          top: 0,
+          opacity: total === 0 ? 0.25 : 1
+        }}
+        variant="h5"
+      >
+        {total ?? 0}
+      </Typography>
     </Box>
   )
 }
