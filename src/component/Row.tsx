@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { FC, useState } from 'react'
-import useMousePosition from '../hooks/useMousePosition'
 import { Card } from '../tools/types'
 
 type Props = {
@@ -11,7 +10,6 @@ type Props = {
 
 const Row: FC<Props> = ({ card }) => {
   const [showImage, setShowImage] = useState(false)
-  const position = useMousePosition()
 
   const ink = card.Color.toLowerCase()
   const name = card.Name.split('-')[0]
@@ -36,27 +34,26 @@ const Row: FC<Props> = ({ card }) => {
       onMouseEnter={() => setShowImage(true)}
       onMouseLeave={() => setShowImage(false)}
     >
-      {showImage && (
-        <Box
-          sx={{
-            position: 'absolute',
-            width: 240,
-            left: position.x! - 280,
-            pointerEvents: 'none',
-            zIndex: 1,
-            bottom: -40
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 240,
+          right: 6,
+          pointerEvents: 'none',
+          zIndex: 1,
+          bottom: 0,
+          display: showImage ? 'block' : 'none'
+        }}
+      >
+        <img
+          src={card.Image}
+          style={{
+            width: '100%',
+            clipPath: 'inset(1px 1px 1px 1px)',
+            borderRadius: 16
           }}
-        >
-          <img
-            src={card.Image}
-            style={{
-              width: '100%',
-              clipPath: 'inset(1px 1px 1px 1px)',
-              borderRadius: 16
-            }}
-          />
-        </Box>
-      )}
+        />
+      </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <img
           src={`https://lorcana.gg/wp-content/uploads/sites/11/2023/11/${ink}-symbol.png`}
@@ -66,7 +63,7 @@ const Row: FC<Props> = ({ card }) => {
         <Box ml={2}>
           <Typography>{name}</Typography>
           <Typography variant="caption" color="secondary">
-            {version || card.Type.includes('Song') && 'Song'}
+            {version || (card.Type.includes('Song') && 'Song')}
           </Typography>
         </Box>
       </Box>

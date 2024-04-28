@@ -22,13 +22,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="static">
-        <Container>
+        <Container maxWidth="md">
           <Toolbar
             disableGutters
             sx={{ justifyContent: 'space-between', position: 'relative' }}
           >
             <Typography component="h1" variant="h5">
-              Lorcarena
+              LorcaREna
             </Typography>
             <Box>
               <IconButton
@@ -42,7 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           </Toolbar>
         </Container>
       </AppBar>
-      <Container>
+      <Container maxWidth="md">
         <RouterProvider router={router} />
       </Container>
     </ThemeProvider>

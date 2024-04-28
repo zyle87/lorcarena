@@ -32,5 +32,6 @@
     "react-use": "^17.5.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
-  }
+  },
+  "dependencies": {}
 }

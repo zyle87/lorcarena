@@ -43,11 +43,13 @@ const DeckBuilder: FC = () => {
     const ink = builder.inks[Math.floor(Math.random() * 2)]
     const inkIndex = inks.indexOf(ink)
 
-    let setNum = Math.floor(Math.random() * 3 + 1)
+    let setIndex = Math.floor(Math.random() * builder.sets.length)
+    let setNum = builder.sets[setIndex]
     let cardNum = Math.floor(Math.random() * 34 + 1 + inkIndex * 34)
 
     while (cardIsInDraftOrDeck(setNum, cardNum)) {
-      setNum = Math.floor(Math.random() * 3 + 1)
+      setIndex = Math.floor(Math.random() * builder.sets.length)
+      setNum = builder.sets[setIndex]
       cardNum = Math.floor(Math.random() * 34 + 1 + inkIndex * 34)
     }
 
@@ -119,18 +121,20 @@ const DeckBuilder: FC = () => {
             >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h5">{`${builder.id} (${builder.deck.length}/40)`}</Typography>
+            <Typography variant="h5">{`${builder.name} (${builder.deck.length}/40)`}</Typography>
           </Box>
-          <Button
-            variant="contained"
-            disabled={builder.reroll === 0}
-            startIcon={<CasinoIcon />}
-            onClick={() => {
-              dispatch(builderActions.reroll())
-            }}
-          >
-            Reroll ({builder.reroll})
-          </Button>
+          {builder.withRerolls && (
+            <Button
+              variant="contained"
+              disabled={builder.reroll === 0}
+              startIcon={<CasinoIcon />}
+              onClick={() => {
+                dispatch(builderActions.reroll())
+              }}
+            >
+              Reroll ({builder.reroll})
+            </Button>
+          )}
         </Box>
         {builder.deck.length < 40 && (
           <Paper
@@ -201,55 +205,76 @@ const DeckBuilder: FC = () => {
             </Box>
           </Paper>
         )}
-
-        <Box
+        <Paper
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: 4
+            marginBottom: 4,
+            padding: 2
           }}
         >
-          <Paper
+          <Box
             sx={{
-              pt: 2,
-              pb: 2,
-              pl: 1,
-              pr: 1,
-              flexGrow: 1,
               height: 360,
-              display: 'flex',
-              alignItems: 'flex-end'
+              width: '100%',
+              position: 'relative',
+              display: 'flex'
             }}
           >
-            {Array.from({ length: 11 }).map((_, index) => {
-              if (builder.deck.length === 0) {
+            <video
+              autoPlay
+              muted
+              loop
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                position: 'absolute',
+                mixBlendMode: 'darken'
+              }}
+            >
+              <source
+                src="https://static.videezy.com/system/resources/previews/000/015/284/original/white_ink_02.mp4"
+                type="video/mp4"
+              />
+            </video>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: 'flex',
+                alignItems: 'flex-end'
+              }}
+            >
+              {Array.from({ length: 11 }).map((_, index) => {
+                if (builder.deck.length === 0) {
+                  return (
+                    <Column
+                      key={index}
+                      percent={0}
+                      cost={index}
+                      length={0}
+                    ></Column>
+                  )
+                }
+
+                const cards = builder.deck.filter((card) => card.Cost === index)
+
+                const percent =
+                  (cards.length / getCardsWithMostCost().length) * 100
+
                 return (
                   <Column
                     key={index}
-                    percent={0}
+                    percent={percent}
                     cost={index}
-                    length={0}
+                    length={cards.length}
                   ></Column>
                 )
-              }
-
-              const cards = builder.deck.filter((card) => card.Cost === index)
-
-              const percent =
-                (cards.length / getCardsWithMostCost().length) * 100
-
-              return (
-                <Column
-                  key={index}
-                  percent={percent}
-                  cost={index}
-                  length={cards.length}
-                ></Column>
-              )
-            })}
-          </Paper>
-        </Box>
+              })}
+            </Box>
+          </Box>
+        </Paper>
         <Box sx={{ display: 'flex', mb: 4 }}>
           <Paper
             sx={{

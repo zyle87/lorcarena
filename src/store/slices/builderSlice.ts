@@ -3,18 +3,24 @@ import { Card, Ink } from '../../tools/types'
 
 export type BuilderState = {
   id: Nullable<number>
+  name: string
   inks: Ink[]
   draft: Card[]
   deck: Card[]
+  withRerolls: boolean
   reroll: number
+  sets: number[]
 }
 
 const initialState: BuilderState = {
   id: null,
+  name: 'New arena deck',
   inks: [],
   draft: [],
   deck: [],
-  reroll: 3
+  withRerolls: false,
+  reroll: 3,
+  sets: [1, 2, 3]
 }
 
 export const builderSlice = createSlice({
@@ -23,6 +29,9 @@ export const builderSlice = createSlice({
   reducers: {
     addInk: (state, action) => {
       state.inks.push(action.payload)
+    },
+    updateName: (state, action) => {
+      state.name = action.payload
     },
     removeInk: (state, action) => {
       state.inks = state.inks.filter((ink) => ink !== action.payload)
@@ -39,9 +48,19 @@ export const builderSlice = createSlice({
     addCardToDeck: (state, action) => {
       state.deck.push(action.payload)
     },
+    toggleRerolls: (state) => {
+      state.withRerolls = !state.withRerolls
+    },
     reroll: (state) => {
       state.draft = []
       state.reroll--
+    },
+    toggleSet: (state, action) => {
+      if (state.sets.includes(action.payload)) {
+        state.sets = state.sets.filter((set) => set !== action.payload)
+      } else {
+        state.sets.push(action.payload)
+      }
     },
     reset: () => initialState,
     parse: (_, action) => {

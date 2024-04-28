@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { FC } from 'react'
 
@@ -11,16 +10,14 @@ type Props = {
 
 const Column: FC<Props> = ({ percent, cost, length }) => {
   return (
-    <Paper
-      variant="outlined"
+    <Box
       sx={{
-        flex: 1,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        mr: 1,
-        ml: 1
+        width: '100%',
+        height: percent + '%',
+        background: '#ffe4b8',
+        borderRadius: 1,
+        ml: 0.25,
+        mr: 0.25
       }}
     >
       <Box
@@ -32,49 +29,45 @@ const Column: FC<Props> = ({ percent, cost, length }) => {
           alignItems: 'center'
         }}
       >
-        {length > 0 && (
+        <Box sx={{ position: 'absolute' }}>
           <Typography
+            variant="h5"
             sx={{
-              textAlign: 'center',
               position: 'absolute',
-              fontWeight: 'bold',
+              top: 8,
+              width: '100%',
+              height: 48,
+              textAlign: 'center',
+              fontWeight: 800
             }}
-            variant="h4"
           >
-            {length}
+            {cost}
           </Typography>
-        )}
+          <img
+            src="https://static.dotgg.gg/lorcana/generic/icon_ink_0.svg"
+            alt={'inkable'}
+            style={{ height: 48, width: 48 }}
+          />
+        </Box>
+        <Typography
+          sx={{
+            textAlign: 'center',
+            position: 'absolute',
+            fontWeight: 'bold',
+            bottom: 64
+          }}
+          variant="h5"
+        >
+          {length ?? 0}
+        </Typography>
         <Box
           sx={{
             height: `${percent}%`,
-            backgroundColor: '#d4b889',
-            borderRadius: 1,
-            mt: 2,
-            width: '60%'
+            width: '100%'
           }}
         ></Box>
       </Box>
-      <Box sx={{ position: 'relative', mt: 1, textAlign: 'center' }}>
-        <Typography
-          variant="h5"
-          sx={{
-            position: 'absolute',
-            top: 8,
-            width: '100%',
-            height: 48,
-            textAlign: 'center',
-            fontWeight: 800
-          }}
-        >
-          {cost}
-        </Typography>
-        <img
-          src="https://static.dotgg.gg/lorcana/generic/icon_ink_0.svg"
-          alt={'inkable'}
-          style={{ height: 48, width: 48 }}
-        />
-      </Box>
-    </Paper>
+    </Box>
   )
 }
 
