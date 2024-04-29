@@ -8,7 +8,7 @@ type Props = {
   total: number
 }
 
-const Column: FC<Props> = ({ percent, cost, total }) => {
+const VerticalBar: FC<Props> = ({ percent, cost, total }) => {
   return (
     <Box
       sx={{
@@ -70,4 +70,4 @@ const Column: FC<Props> = ({ percent, cost, total }) => {
   )
 }
 
-export default Column
+export default VerticalBar

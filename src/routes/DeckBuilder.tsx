@@ -13,8 +13,8 @@ import axios from 'axios'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMount, useUpdateEffect } from 'react-use'
-import Column from '../component/Column'
-import Row from '../component/Row'
+import VerticalBar from '../component/VerticalBar'
+import CardRow from '../component/CardRow'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
@@ -254,12 +254,12 @@ const DeckBuilder: FC = () => {
             {Array.from({ length: 11 }).map((_, index) => {
               if (builder.deck.length === 0) {
                 return (
-                  <Column
+                  <VerticalBar
                     key={index}
                     percent={0}
                     cost={index}
                     total={0}
-                  ></Column>
+                  ></VerticalBar>
                 )
               }
 
@@ -269,12 +269,12 @@ const DeckBuilder: FC = () => {
                 (cards.length / getCardsWithMostCost().length) * 100
 
               return (
-                <Column
+                <VerticalBar
                   key={index}
                   percent={percent}
                   cost={index}
                   total={cards.length}
-                ></Column>
+                ></VerticalBar>
               )
             })}
           </Box>
@@ -396,7 +396,7 @@ const DeckBuilder: FC = () => {
               .filter((card) => card.Type === 'Character')
               .sort((a, b) => a.Cost - b.Cost)
               .map((card) => (
-                <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
               ))}
           </AccordionDetails>
         </Accordion>
@@ -411,7 +411,7 @@ const DeckBuilder: FC = () => {
               .filter((card) => card.Type === 'Item')
               .sort((a, b) => a.Cost - b.Cost)
               .map((card) => (
-                <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
               ))}
           </AccordionDetails>
         </Accordion>
@@ -426,7 +426,7 @@ const DeckBuilder: FC = () => {
               .filter((card) => card.Type.includes('Action'))
               .sort((a, b) => a.Cost - b.Cost)
               .map((card) => (
-                <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
               ))}
           </AccordionDetails>
         </Accordion>
@@ -441,7 +441,7 @@ const DeckBuilder: FC = () => {
               .filter((card) => card.Type === 'Location')
               .sort((a, b) => a.Cost - b.Cost)
               .map((card) => (
-                <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
               ))}
           </AccordionDetails>
         </Accordion>

@@ -8,7 +8,7 @@ type Props = {
   card: Card
 }
 
-const Row: FC<Props> = ({ card }) => {
+const CardRow: FC<Props> = ({ card }) => {
   const [showImage, setShowImage] = useState(false)
 
   const ink = card.Color.toLowerCase()
@@ -99,4 +99,4 @@ const Row: FC<Props> = ({ card }) => {
   )
 }
 
-export default Row
+export default CardRow
