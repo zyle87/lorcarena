@@ -13,8 +13,8 @@ import axios from 'axios'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMount, useUpdateEffect } from 'react-use'
-import VerticalBar from '../component/VerticalBar'
 import CardRow from '../component/CardRow'
+import VerticalBar from '../component/VerticalBar'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
@@ -178,7 +178,7 @@ const DeckBuilder: FC = () => {
                       sx={{
                         transition: 'all 0.2s',
                         borderRadius: 4,
-                        background: 'black !important',
+                        overflow: 'hidden',
                         boxShadow:
                           currentImageIndex === index
                             ? `0 0 20px 0px ${
@@ -193,11 +193,7 @@ const DeckBuilder: FC = () => {
                       <img
                         src={card.Image}
                         style={{
-                          width: '100%',
-                          borderRadius: 16,
-                          objectFit: 'cover',
-                          objectPosition: 'center',
-                          clipPath: 'inset(6px 6px 6px 6px)'
+                          width: '100%'
                         }}
                       />
                     </Button>

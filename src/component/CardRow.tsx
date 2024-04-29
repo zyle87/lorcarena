@@ -49,7 +49,7 @@ const CardRow: FC<Props> = ({ card }) => {
           src={card.Image}
           style={{
             width: '100%',
-            clipPath: 'inset(1px 1px 1px 1px)',
+            clipPath: 'inset(1px)',
             borderRadius: 16
           }}
         />
