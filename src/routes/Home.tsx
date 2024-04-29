@@ -21,7 +21,7 @@ const Home: FC = () => {
   const navigate = useNavigate()
 
   return (
-    <main>
+    <Box>
       {settings.saves.length > 0 && (
         <Paper sx={{ mt: 2, p: 1 }}>
           {settings.saves.map((save) => (
@@ -79,7 +79,7 @@ const Home: FC = () => {
         Build a new arena deck
       </Button>
       <NewDeckModal open={newDeckModalOpen} setOpen={setNewDeckModalOpen} />
-    </main>
+    </Box>
   )
 }
 
