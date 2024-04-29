@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { builderActions } from '../store/slices/builderSlice'
 import { SettingsState, settingsActions } from '../store/slices/settingsSlice'
+import Paper from '@mui/material/Paper'
 
 type Props = {
   save: SettingsState['saves'][number]
@@ -18,13 +19,17 @@ const DeckRow: FC<Props> = ({ save }) => {
   const navigate = useNavigate()
 
   return (
-    <Box
+    <Paper
       key={save.id}
+      variant='outlined'
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 1
+        padding: 1,
+        '&:not(:last-child)': {
+          mb: 1
+        }
       }}
     >
       <Box sx={{ display: 'flex' }}>
@@ -56,7 +61,7 @@ const DeckRow: FC<Props> = ({ save }) => {
           <DeleteIcon />
         </IconButton>
       </Box>
-    </Box>
+    </Paper>
   )
 }
 

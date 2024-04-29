@@ -18,10 +18,12 @@ const Home: FC = () => {
   return (
     <Box>
       {settings.saves.length > 0 && (
-        <Paper sx={{ mt: 2, p: 1 }}>
-          {settings.saves.map((save) => (
-            <DeckRow key={save.id} save={save} />
-          ))}
+        <Paper sx={{ mt: 2, p: 2 }}>
+          <Box>
+            {settings.saves.map((save) => (
+              <DeckRow key={save.id} save={save} />
+            ))}
+          </Box>
           <Button
             startIcon={<ConstructionIcon />}
             onClick={() => {
