@@ -19,7 +19,7 @@ const Root: FC = () => {
             sx={{ justifyContent: 'space-between', position: 'relative' }}
           >
             <Typography component="h1" variant="h5">
-              LorcaREna
+              Lorca<strong>RE</strong>na
             </Typography>
             <Box>
               <IconButton
