@@ -446,14 +446,6 @@ const DeckBuilder: FC = () => {
           </AccordionDetails>
         </Accordion>
       </Box>
-      <Button
-        onClick={() => {
-          generateDraft()
-        }}
-        sx={{ mb: 2 }}
-      >
-        Refresh draft
-      </Button>
     </Box>
   )
 }

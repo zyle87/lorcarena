@@ -65,19 +65,19 @@ const Home: FC = () => {
               </Box>
             </Box>
           ))}
+          <Button
+            startIcon={<ConstructionIcon />}
+            onClick={() => {
+              setNewDeckModalOpen(true)
+              dispatch(builderActions.reset())
+            }}
+            sx={{ mt: 2 }}
+            fullWidth
+          >
+            Build a new arena deck
+          </Button>
         </Paper>
       )}
-      <Button
-        variant="contained"
-        startIcon={<ConstructionIcon />}
-        onClick={() => {
-          setNewDeckModalOpen(true)
-          dispatch(builderActions.reset())
-        }}
-        sx={{ mt: 2 }}
-      >
-        Build a new arena deck
-      </Button>
       <NewDeckModal open={newDeckModalOpen} setOpen={setNewDeckModalOpen} />
     </Box>
   )
