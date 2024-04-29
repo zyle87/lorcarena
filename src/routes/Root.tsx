@@ -3,27 +3,26 @@ import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
-import Link from '@mui/material/Link'
+import MUILink from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { FC } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 const Root: FC = () => {
   return (
     <main>
-      <AppBar position="static">
+      <AppBar>
         <Container maxWidth="md">
-          <Toolbar
-            disableGutters
-            sx={{ justifyContent: 'space-between', position: 'relative' }}
-          >
-            <Typography component="h1" variant="h5">
-              Lorca<strong>RE</strong>na
-            </Typography>
+          <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+            <Link to="/#" style={{ color: 'inherit', textDecoration: 'none' }}>
+              <Typography component="h1" variant="h5">
+                Lorca<strong>RE</strong>na
+              </Typography>
+            </Link>
             <Box>
               <IconButton
-                component={Link}
+                component={MUILink}
                 href="https://github.com/zyle87/lorcarena"
                 target="_blank"
               >
@@ -33,7 +32,7 @@ const Root: FC = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ mt: 12 }}>
         <Outlet />
       </Container>
     </main>
