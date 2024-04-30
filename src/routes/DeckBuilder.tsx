@@ -117,6 +117,8 @@ const DeckBuilder: FC = () => {
               navigate('/#')
             }}
             sx={{ mr: 1 }}
+            title="Back to home"
+            aria-label="Back to home"
           >
             <ArrowBackIcon />
           </IconButton>
