@@ -13,6 +13,7 @@ import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
 import { inks } from '../tools/const'
+import IconButton from '@mui/material/IconButton'
 
 type Props = {
   open: boolean
@@ -62,7 +63,7 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
             Inks
           </Typography>
           {inks.map((ink, index) => (
-            <Button
+            <IconButton
               disabled={
                 builder.inks.length === 2 && !builder.inks.includes(ink)
               }
@@ -78,19 +79,27 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
               sx={{
                 opacity: builder.inks.includes(ink) ? 1 : 0.25
               }}
+              title={
+                builder.inks.includes(ink) ? `Remove ${ink}` : `Add ${ink}`
+              }
+              aria-label={
+                builder.inks.includes(ink) ? `Remove ${ink}` : `Add ${ink}`
+              }
             >
               <img
                 src={`https://lorcana.gg/wp-content/uploads/sites/11/2023/11/${ink.toLowerCase()}-symbol.png`}
                 alt={ink}
                 style={{
                   height: 64,
+                  width: 64,
+                  objectFit: 'contain',
                   transition: 'transform 0.2s',
                   transform: builder.inks.includes(ink)
                     ? 'scale(1.1)'
                     : 'scale(1)'
                 }}
               />
-            </Button>
+            </IconButton>
           ))}
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }} variant="outlined">

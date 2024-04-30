@@ -50,6 +50,8 @@ const DeckRow: FC<Props> = ({ save, onDelete }) => {
             dispatch(builderActions.parse(save))
             navigate('/build')
           }}
+          title='Edit deck'
+          aria-label='Edit deck'
         >
           <DrawIcon />
         </IconButton>
@@ -58,6 +60,8 @@ const DeckRow: FC<Props> = ({ save, onDelete }) => {
           onClick={() => {
             onDelete(save.id)
           }}
+          title='Delete deck'
+          aria-label='Delete deck'
         >
           <DeleteIcon />
         </IconButton>
