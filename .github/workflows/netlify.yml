@@ -40,7 +40,7 @@ jobs:
         run: git tag -fa ${{ env.STRIPPED_TAG_NAME }} -m"${{ env.STRIPPED_TAG_NAME }}"
 
       - name: Push new tag
-        run: git push ${{ env.STRIPPED_TAG_NAME }} -f
+        run: git push origin tag ${{ env.STRIPPED_TAG_NAME }} -f
 
       - name: Push version commit
         run: git push origin master
