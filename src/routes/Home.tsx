@@ -19,7 +19,7 @@ const Home: FC = () => {
 
   return (
     <Box>
-      <Paper sx={{ p: 2 }}>
+      <Paper sx={{ p: 2, textAlign: 'center' }}>
         <Box>
           {settings.saves.map((save) => (
             <Box key={save.id} mb={2}>
@@ -39,7 +39,6 @@ const Home: FC = () => {
             setNewDeckModalOpen(true)
             dispatch(builderActions.reset())
           }}
-          fullWidth
         >
           Build a new arena deck
         </Button>
