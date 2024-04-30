@@ -1,7 +1,9 @@
+import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
+import IconButton from '@mui/material/IconButton'
 import Modal from '@mui/material/Modal'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
@@ -13,7 +15,6 @@ import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
 import { inks } from '../tools/const'
-import IconButton from '@mui/material/IconButton'
 
 type Props = {
   open: boolean
@@ -37,6 +38,7 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
       onClose={() => {
         setOpen(false)
       }}
+      sx={{ overflowY: 'auto' }}
     >
       <Paper
         sx={{
@@ -103,29 +105,40 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
           ))}
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }} variant="outlined">
-          <Typography variant="h6" sx={{ textAlign: 'center' }}>
+          <Typography variant="h6" sx={{ textAlign: 'center', mb: 2 }}>
             Sets
           </Typography>
-          <FormGroup>
-            {[
-              'The First Chapter',
-              'Rise of the Floodborn',
-              'Into the Inklands'
-            ].map((set, index) => (
-              <FormControlLabel
+          <Box sx={{ display: 'flex' }}>
+            {['1TFC.png', '2ROF.png', '3INK.png'].map((set, index) => (
+              <Button
                 key={set}
-                control={
-                  <Checkbox
-                    checked={builder.sets.includes(index + 1)}
-                    onChange={(_) => {
-                      dispatch(builderActions.toggleSet(index + 1))
-                    }}
-                  />
-                }
-                label={set}
-              />
+                fullWidth
+                onClick={() => {
+                  if (builder.sets.includes(1)) {
+                    dispatch(builderActions.toggleSet(index + 1))
+                  } else {
+                    dispatch(builderActions.toggleSet(index + 1))
+                  }
+                }}
+                aria-label={`Set ${index + 1} (${set})`}
+              >
+                <img
+                  src={`/assets/${set}`}
+                  alt={`Set ${index + 1} (${set})`}
+                  style={{
+                    height: 64,
+                    width: 128,
+                    objectFit: 'contain',
+                    transition: 'transform 0.2s',
+                    transform: builder.sets.includes(index + 1)
+                      ? 'scale(1.1)'
+                      : 'scale(1)',
+                    opacity: builder.sets.includes(index + 1) ? 1 : 0.25
+                  }}
+                />
+              </Button>
             ))}
-          </FormGroup>
+          </Box>
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }} variant="outlined">
           <Typography variant="h6" sx={{ textAlign: 'center' }}>

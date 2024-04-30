@@ -49,21 +49,22 @@ const ConfirmDeleteModal: FC<Props> = ({ open, setOpen, id }) => {
         </Typography>
         <Box sx={{ textAlign: 'right', mt: 2 }}>
           <Button
-            color="error"
             sx={{ mr: 1 }}
+            onClick={() => {
+              setOpen(false)
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            color="error"
+            variant="contained"
             onClick={() => {
               dispatch(settingsActions.removeSave(id!))
               setOpen(false)
             }}
           >
             Delete
-          </Button>
-          <Button
-            onClick={() => {
-              setOpen(false)
-            }}
-          >
-            Cancel
           </Button>
         </Box>
       </Paper>
