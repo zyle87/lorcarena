@@ -32,8 +32,8 @@ jobs:
 
       - name: Strip v from tag name
         run: |
-          VERSION=${{ github.event.release.tag_name }}
-          echo "VERSION=${VERSION:1}" >> $GITHUB_ENV
+          TAG=${{ github.event.release.tag_name }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_ENV
 
       - name: Up version
         run: yarn version --new-version ${{ github.event.release.tag_name }}
