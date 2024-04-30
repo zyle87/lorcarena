@@ -30,14 +30,16 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
 
-      - name: Strip "v" from tag name
-        run: echo "STRIPPED_TAG_NAME=$(echo ${{ github.event.release.tag_name }} | sed 's/^v//')" >> $GITHUB_ENV
+      - name: Strip v from tag name
+        run: |
+          VERSION=${{ github.event.release.tag_name }}
+          echo "VERSION=${VERSION:1}" >> $GITHUB_ENV
 
       - name: Up version
         run: yarn version --new-version ${{ github.event.release.tag_name }}
 
       - name: Forwards tag
-        run: git tag -fa ${{ env.STRIPPED_TAG_NAME }}" -m"${{ env.STRIPPED_TAG_NAME }}""
+        run: git tag -fa ${VERSION} -m"${env.VERSION}"
 
       - name: Push new tag
         run: git push -f --tags
