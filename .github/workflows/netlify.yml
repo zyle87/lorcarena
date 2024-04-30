@@ -33,6 +33,12 @@ jobs:
       - name: Up version
         run: yarn version --new-version ${{ github.event.release.tag_name }}
 
+      - name: Forwards tag
+        run: git tag -fa ${{ github.event.release.tag_name }} -m"${{ github.event.release.tag_name }}"
+
+      - name: Push new tag
+        run: git push -f --tags
+
       - name: Push version commit
         run: git push origin master
 
