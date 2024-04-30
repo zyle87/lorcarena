@@ -34,7 +34,7 @@ jobs:
         run: echo "STRIPPED_TAG_NAME=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Up version
-        run: yarn version --new-version ${{ env.STRIPPED_TAG_NAME }}
+        run: yarn version --new-version ${{ github.event.release.tag_name }}
 
       - name: Forwards tag
         run: git tag -fa ${{ env.STRIPPED_TAG_NAME }}" -m"${{ env.STRIPPED_TAG_NAME }}""
