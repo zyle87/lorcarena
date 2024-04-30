@@ -31,7 +31,7 @@ jobs:
           git config user.email "<>"
 
       - name: Strip v from tag name
-        run: echo "STRIPPED_TAG_NAME=${GITHUB_REF#v}" >> $GITHUB_ENV
+        run: echo "STRIPPED_TAG_NAME=$(echo ${{ github.event.release.tag_name }} | sed 's/^v//')" >> $GITHUB_ENV
 
       - name: Up version
         run: yarn version --new-version ${{ github.event.release.tag_name }}
