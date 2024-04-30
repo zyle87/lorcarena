@@ -79,7 +79,11 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
           >
             <CasinoIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ textAlign: 'center' }}>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: 'center' }}
+            color={builder.inks.length !== 2 ? 'error' : 'inherit'}
+          >
             Inks
           </Typography>
           {inks.map((ink, index) => (
@@ -123,7 +127,11 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
           ))}
         </Paper>
         <Paper sx={{ p: 2, mb: 2 }} variant="outlined">
-          <Typography variant="h6" sx={{ textAlign: 'center', mb: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{ textAlign: 'center', mb: 2 }}
+            color={builder.sets.length === 0 ? 'error' : 'inherit'}
+          >
             Sets
           </Typography>
           <Box sx={{ display: 'flex' }}>
@@ -184,6 +192,7 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
           }
           sx={{ display: 'block', mt: 2 }}
           fullWidth
+          variant="contained"
           onClick={() => {
             dispatch(builderActions.generateId())
             navigate('/build')

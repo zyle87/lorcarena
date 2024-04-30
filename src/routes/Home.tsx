@@ -35,6 +35,7 @@ const Home: FC = () => {
         </Box>
         <Button
           startIcon={<LayersIcon />}
+          variant='contained'
           onClick={() => {
             setNewDeckModalOpen(true)
             dispatch(builderActions.reset())

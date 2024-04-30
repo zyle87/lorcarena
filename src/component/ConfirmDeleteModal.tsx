@@ -44,10 +44,10 @@ const ConfirmDeleteModal: FC<Props> = ({ open, setOpen, id }) => {
           transform: 'translate(-50%, -50%)'
         }}
       >
-        <Typography variant="body1">
+        <Typography variant="body1" sx={{ mb: 2 }}>
           Are you sure you want to delete <strong>{deck?.name}</strong>?
         </Typography>
-        <Box sx={{ textAlign: 'right', mt: 2 }}>
+        <Box sx={{ textAlign: 'right' }}>
           <Button
             sx={{ mr: 1 }}
             onClick={() => {
