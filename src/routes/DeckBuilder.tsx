@@ -13,8 +13,8 @@ import axios from 'axios'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMount, useUpdateEffect } from 'react-use'
-import Column from '../component/Column'
-import Row from '../component/Row'
+import CardRow from '../component/CardRow'
+import VerticalBar from '../component/VerticalBar'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
@@ -43,12 +43,14 @@ const DeckBuilder: FC = () => {
     const ink = builder.inks[Math.floor(Math.random() * 2)]
     const inkIndex = inks.indexOf(ink)
 
-    let setNum = Math.floor(Math.random() * 3 + 1)
-    let cardNum = Math.floor(Math.random() * 34 + 1 + inkIndex * 34)
+    let setIndex = Math.floor(Math.random() * builder.sets.length)
+    let setNum = builder.sets[setIndex]
+    let cardNum = inkIndex * 34 + Math.floor(Math.random() * 34) + 1
 
     while (cardIsInDraftOrDeck(setNum, cardNum)) {
-      setNum = Math.floor(Math.random() * 3 + 1)
-      cardNum = Math.floor(Math.random() * 34 + 1 + inkIndex * 34)
+      setIndex = Math.floor(Math.random() * builder.sets.length)
+      setNum = builder.sets[setIndex]
+      cardNum = inkIndex * 34 + Math.floor(Math.random() * 34) + 1
     }
 
     const response = await axios.get<Card[]>(
@@ -99,28 +101,28 @@ const DeckBuilder: FC = () => {
   }
 
   return (
-    <main>
-      <Box>
-        <Box
-          sx={{
-            display: 'flex',
-            mt: 4,
-            mb: 4,
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton
-              onClick={() => {
-                navigate('/#')
-              }}
-              sx={{ mr: 1 }}
-            >
-              <ArrowBackIcon />
-            </IconButton>
-            <Typography variant="h5">{`Deck (${builder.deck.length}/40)`}</Typography>
-          </Box>
+    <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          mt: 4,
+          mb: 4,
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <IconButton
+            onClick={() => {
+              navigate('/#')
+            }}
+            sx={{ mr: 1 }}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h5">{`${builder.name} (${builder.deck.length}/40)`}</Typography>
+        </Box>
+        {builder.withRerolls && (
           <Button
             variant="contained"
             disabled={builder.reroll === 0}
@@ -131,106 +133,129 @@ const DeckBuilder: FC = () => {
           >
             Reroll ({builder.reroll})
           </Button>
-        </Box>
-        {builder.deck.length < 40 && (
-          <Paper
-            sx={{
-              padding: 2,
-              mb: 4,
-              mt: 4
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                ml: -1,
-                mr: -1
-              }}
-            >
-              {Array.from({ length: 3 }).map((_, index) => {
-                const card = builder.draft[index]
-
-                return (
-                  <Box
-                    key={index}
-                    sx={{ flex: '1 1 0', borderRadius: 4, ml: 1, mr: 1 }}
-                  >
-                    {card && (
-                      <Button
-                        key={index}
-                        onClick={() => {
-                          dispatch(builderActions.addCardToDeck(card))
-                          dispatch(builderActions.clearDraft())
-                        }}
-                        onMouseEnter={() => {
-                          setCurrentImageIndex(index)
-                        }}
-                        onMouseLeave={() => {
-                          setCurrentImageIndex(-1)
-                        }}
-                        sx={{
-                          transition: 'all 0.2s',
-                          borderRadius: 4,
-                          background: 'black !important',
-                          boxShadow:
-                            currentImageIndex === index
-                              ? `0 0 20px 0px ${
-                                  card.Rarity === 'Legendary' ? 'gold' : 'black'
-                                }`
-                              : `0 0 0 0 black`,
-                          scale: currentImageIndex === index ? '1.02' : '1',
-                          zIndex: currentImageIndex === index ? 1 : 0,
-                          padding: 0
-                        }}
-                      >
-                        <img
-                          src={card.Image}
-                          style={{
-                            width: '100%',
-                            borderRadius: 16,
-                            objectFit: 'cover',
-                            objectPosition: 'center',
-                            clipPath: 'inset(6px 6px 6px 6px)'
-                          }}
-                        />
-                      </Button>
-                    )}
-                  </Box>
-                )
-              })}
-            </Box>
-          </Paper>
         )}
-
-        <Box
+      </Box>
+      {builder.deck.length < 40 && (
+        <Paper
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 4
+            padding: 2,
+            mb: 2,
+            mt: 4
           }}
         >
-          <Paper
+          <Box
             sx={{
-              pt: 2,
-              pb: 2,
-              pl: 1,
-              pr: 1,
-              flexGrow: 1,
-              height: 360,
               display: 'flex',
-              alignItems: 'flex-end'
+              ml: -1,
+              mr: -1
+            }}
+          >
+            {Array.from({ length: 3 }).map((_, index) => {
+              const card = builder.draft[index]
+
+              return (
+                <Box
+                  key={index}
+                  sx={{ flex: '1 1 0', borderRadius: 4, ml: 1, mr: 1 }}
+                >
+                  {card && (
+                    <Button
+                      key={index}
+                      onClick={() => {
+                        if (builder.draft.length !== 3) {
+                          return
+                        }
+
+                        dispatch(builderActions.addCardToDeck(card))
+                        dispatch(builderActions.clearDraft())
+                      }}
+                      onMouseEnter={() => {
+                        setCurrentImageIndex(index)
+                      }}
+                      onMouseLeave={() => {
+                        setCurrentImageIndex(-1)
+                      }}
+                      sx={{
+                        transition: 'all 0.2s',
+                        borderRadius: 4,
+                        overflow: 'hidden',
+                        boxShadow:
+                          currentImageIndex === index
+                            ? `0 0 20px 0px ${
+                                card.Rarity === 'Legendary' ? 'gold' : 'black'
+                              }`
+                            : `0 0 0 0 black`,
+                        scale: currentImageIndex === index ? '1.02' : '1',
+                        zIndex: currentImageIndex === index ? 1 : 0,
+                        padding: 0
+                      }}
+                    >
+                      <img
+                        src={card.Image}
+                        style={{
+                          width: '100%'
+                        }}
+                      />
+                    </Button>
+                  )}
+                </Box>
+              )
+            })}
+          </Box>
+        </Paper>
+      )}
+      <Paper
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 2,
+          padding: 2
+        }}
+      >
+        <Box
+          sx={{
+            height: 360,
+            width: '100%',
+            position: 'relative',
+            display: 'flex'
+          }}
+        >
+          <video
+            autoPlay
+            muted
+            loop
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              position: 'absolute',
+              mixBlendMode: 'darken',
+              filter: 'grayscale(1) contrast(2)'
+            }}
+          >
+            <source
+              src="https://static.videezy.com/system/resources/previews/000/036/612/original/18_010_07.mp4"
+              type="video/mp4"
+            />
+          </video>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: 'flex',
+              alignItems: 'flex-end',
+              mx: -0.5
             }}
           >
             {Array.from({ length: 11 }).map((_, index) => {
               if (builder.deck.length === 0) {
                 return (
-                  <Column
+                  <VerticalBar
                     key={index}
                     percent={0}
                     cost={index}
-                    length={0}
-                  ></Column>
+                    total={0}
+                  ></VerticalBar>
                 )
               }
 
@@ -240,193 +265,184 @@ const DeckBuilder: FC = () => {
                 (cards.length / getCardsWithMostCost().length) * 100
 
               return (
-                <Column
+                <VerticalBar
                   key={index}
                   percent={percent}
                   cost={index}
-                  length={cards.length}
-                ></Column>
+                  total={cards.length}
+                ></VerticalBar>
               )
             })}
-          </Paper>
+          </Box>
         </Box>
-        <Box sx={{ display: 'flex', mb: 4 }}>
-          <Paper
-            sx={{
-              padding: 2,
-              position: 'relative',
-              display: 'flex',
-              mr: 2,
-              flex: 1,
-              justifyContent: 'center'
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                position: 'relative'
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  width: 48,
-                  height: 48,
-                  textAlign: 'center',
-                  fontWeight: 'bold'
-                }}
-              >
-                {builder.deck.filter((card) => !card.Inkable).length}
-              </Typography>
-              <img
-                src="https://static.dotgg.gg/lorcana/generic/icon_ink_0.svg"
-                alt={'inkable'}
-                style={{ height: 48, width: 48 }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                position: 'relative'
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  width: 48,
-                  height: 48,
-                  textAlign: 'center',
-                  fontWeight: 'bold'
-                }}
-              >
-                {builder.deck.filter((card) => card.Inkable).length}
-              </Typography>
-              <img
-                src="https://static.dotgg.gg/lorcana/generic/icon_ink_1.svg"
-                alt={'inkable'}
-                style={{ height: 48, width: 48 }}
-              />
-            </Box>
-          </Paper>
-          <Paper
-            sx={{
-              padding: 2,
-              position: 'relative',
-              display: 'flex',
-              flex: 1,
-              justifyContent: 'center'
-            }}
-          >
-            {builder.inks.map((ink) => (
-              <Box
-                key={ink}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  position: 'relative'
-                }}
-              >
-                <Typography
-                  variant="h5"
-                  sx={{
-                    position: 'absolute',
-                    top: 8,
-                    width: 48,
-                    height: 48,
-                    textAlign: 'center',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  {builder.deck.filter((card) => card.Color === ink).length}
-                </Typography>
-                <img
-                  src={`https://lorcana.gg/wp-content/uploads/sites/11/2023/11/${ink.toLowerCase()}-symbol.png`}
-                  alt={ink}
-                  style={{ height: 48, width: 48, objectFit: 'contain' }}
-                />
-              </Box>
-            ))}
-          </Paper>
-        </Box>
-        <Box mb={4}>
-          <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              {`Character (${
-                builder.deck.filter((card) => card.Type === 'Character').length
-              })`}
-            </AccordionSummary>
-            <AccordionDetails>
-              {builder.deck
-                .filter((card) => card.Type === 'Character')
-                .sort((a, b) => a.Cost - b.Cost)
-                .map((card) => (
-                  <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-                ))}
-            </AccordionDetails>
-          </Accordion>
-          <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              {`Item (${
-                builder.deck.filter((card) => card.Type === 'Item').length
-              })`}
-            </AccordionSummary>
-            <AccordionDetails>
-              {builder.deck
-                .filter((card) => card.Type === 'Item')
-                .sort((a, b) => a.Cost - b.Cost)
-                .map((card) => (
-                  <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-                ))}
-            </AccordionDetails>
-          </Accordion>
-          <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              {`Action (${
-                builder.deck.filter((card) => card.Type.includes('Action'))
-                  .length
-              })`}
-            </AccordionSummary>
-            <AccordionDetails>
-              {builder.deck
-                .filter((card) => card.Type.includes('Action'))
-                .sort((a, b) => a.Cost - b.Cost)
-                .map((card) => (
-                  <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-                ))}
-            </AccordionDetails>
-          </Accordion>
-          <Accordion defaultExpanded>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              {`Location (${
-                builder.deck.filter((card) => card.Type === 'Location').length
-              })`}
-            </AccordionSummary>
-            <AccordionDetails>
-              {builder.deck
-                .filter((card) => card.Type === 'Location')
-                .sort((a, b) => a.Cost - b.Cost)
-                .map((card) => (
-                  <Row key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-                ))}
-            </AccordionDetails>
-          </Accordion>
-        </Box>
-        <Button
-          onClick={() => {
-            generateDraft()
+      </Paper>
+      <Box sx={{ display: 'flex', mb: 2 }}>
+        <Paper
+          sx={{
+            padding: 2,
+            position: 'relative',
+            display: 'flex',
+            mr: 2,
+            flex: 1,
+            justifyContent: 'center'
           }}
-          sx={{ mb: 2 }}
         >
-          Refresh draft
-        </Button>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative'
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                position: 'absolute',
+                top: 8,
+                width: 48,
+                height: 48,
+                textAlign: 'center',
+                fontWeight: 'bold'
+              }}
+            >
+              {builder.deck.filter((card) => !card.Inkable).length}
+            </Typography>
+            <img
+              src="https://static.dotgg.gg/lorcana/generic/icon_ink_0.svg"
+              alt={'inkable'}
+              style={{ height: 48, width: 48 }}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative'
+            }}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                position: 'absolute',
+                top: 8,
+                width: 48,
+                height: 48,
+                textAlign: 'center',
+                fontWeight: 'bold'
+              }}
+            >
+              {builder.deck.filter((card) => card.Inkable).length}
+            </Typography>
+            <img
+              src="https://static.dotgg.gg/lorcana/generic/icon_ink_1.svg"
+              alt={'inkable'}
+              style={{ height: 48, width: 48 }}
+            />
+          </Box>
+        </Paper>
+        <Paper
+          sx={{
+            padding: 2,
+            position: 'relative',
+            display: 'flex',
+            flex: 1,
+            justifyContent: 'center'
+          }}
+        >
+          {builder.inks.map((ink) => (
+            <Box
+              key={ink}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                position: 'relative'
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  width: 48,
+                  height: 48,
+                  textAlign: 'center',
+                  fontWeight: 'bold'
+                }}
+              >
+                {builder.deck.filter((card) => card.Color === ink).length}
+              </Typography>
+              <img
+                src={`https://lorcana.gg/wp-content/uploads/sites/11/2023/11/${ink.toLowerCase()}-symbol.png`}
+                alt={ink}
+                style={{ height: 48, width: 48, objectFit: 'contain' }}
+              />
+            </Box>
+          ))}
+        </Paper>
       </Box>
-    </main>
+      <Box mb={4}>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            {`Character (${
+              builder.deck.filter((card) => card.Type === 'Character').length
+            })`}
+          </AccordionSummary>
+          <AccordionDetails>
+            {builder.deck
+              .filter((card) => card.Type === 'Character')
+              .sort((a, b) => a.Cost - b.Cost)
+              .map((card) => (
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+              ))}
+          </AccordionDetails>
+        </Accordion>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            {`Item (${
+              builder.deck.filter((card) => card.Type === 'Item').length
+            })`}
+          </AccordionSummary>
+          <AccordionDetails>
+            {builder.deck
+              .filter((card) => card.Type === 'Item')
+              .sort((a, b) => a.Cost - b.Cost)
+              .map((card) => (
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+              ))}
+          </AccordionDetails>
+        </Accordion>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            {`Action (${
+              builder.deck.filter((card) => card.Type.includes('Action')).length
+            })`}
+          </AccordionSummary>
+          <AccordionDetails>
+            {builder.deck
+              .filter((card) => card.Type.includes('Action'))
+              .sort((a, b) => a.Cost - b.Cost)
+              .map((card) => (
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+              ))}
+          </AccordionDetails>
+        </Accordion>
+        <Accordion defaultExpanded>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            {`Location (${
+              builder.deck.filter((card) => card.Type === 'Location').length
+            })`}
+          </AccordionSummary>
+          <AccordionDetails>
+            {builder.deck
+              .filter((card) => card.Type === 'Location')
+              .sort((a, b) => a.Cost - b.Cost)
+              .map((card) => (
+                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
+              ))}
+          </AccordionDetails>
+        </Accordion>
+      </Box>
+    </Box>
   )
 }
 
