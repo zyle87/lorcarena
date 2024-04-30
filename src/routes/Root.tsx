@@ -8,6 +8,7 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { FC } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import packageJson from '../../package.json'
 
 const Root: FC = () => {
   return (
@@ -34,6 +35,9 @@ const Root: FC = () => {
       </AppBar>
       <Container maxWidth="md" sx={{ mt: 12 }}>
         <Outlet />
+        <Typography align="center" color="textSecondary" variant="body2" my={2}>
+          Version {packageJson.version}
+        </Typography>
       </Container>
     </main>
   )

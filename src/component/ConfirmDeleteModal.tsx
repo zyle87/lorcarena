@@ -50,7 +50,6 @@ const ConfirmDeleteModal: FC<Props> = ({ open, setOpen, id }) => {
         <Box sx={{ textAlign: 'right', mt: 2 }}>
           <Button
             color="error"
-            variant="contained"
             sx={{ mr: 1 }}
             onClick={() => {
               dispatch(settingsActions.removeSave(id!))
