@@ -1,0 +1,67 @@
+on:
+  release:
+    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+    types: [published]
+
+name: Deploy to netlify
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: netlify
+    steps:
+      - uses: actions/setup-node@master
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/checkout@master
+        with:
+          ref: 'refs/heads/master'
+          token: ${{ secrets.ACTION_GITHUB_BOT }}
+
+      ##################
+      # Version upping #
+      ##################
+
+      # Note: it's important that this is being run before the version is upped
+      # because a commit will be created during the process
+      - name: Set git config
+        run: |
+          # setup the username and email.
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Strip v from tag name
+        run: echo "STRIPPED_TAG_NAME=$(echo ${{ github.event.release.tag_name }} | sed 's/^v//')" >> $GITHUB_ENV
+
+      - name: Up version
+        run: yarn version --new-version ${{ env.STRIPPED_TAG_NAME }}
+
+      - name: Forwards tag
+        run: git tag -fa ${{ env.STRIPPED_TAG_NAME }} -m"${{ env.STRIPPED_TAG_NAME }}"
+
+      - name: Push new tag
+        run: git push ${{ env.STRIPPED_TAG_NAME }} -f
+
+      - name: Push version commit
+        run: git push origin master
+
+      ##############
+      # Publishing #
+      ##############
+
+      - name: Setup node
+        uses: actions/setup-node@master
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build app
+        run: yarn build
+
+      - name: Publish app
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=build --prod
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
