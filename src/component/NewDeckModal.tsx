@@ -1,3 +1,4 @@
+import CasinoIcon from '@mui/icons-material/CasinoRounded'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -60,7 +61,24 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
           }}
           sx={{ mb: 2 }}
         />
-        <Paper sx={{ p: 2, mb: 2 }} variant="outlined">
+        <Paper
+          sx={{
+            p: 2,
+            mb: 2,
+            position: 'relative'
+          }}
+          variant="outlined"
+        >
+          <IconButton
+            onClick={() => {
+              dispatch(builderActions.randomizeInks())
+            }}
+            sx={{ ml: 2, position: 'absolute', top: 8, right: 8 }}
+            title="Randomize inks"
+            aria-label="Randomize inks"
+          >
+            <CasinoIcon />
+          </IconButton>
           <Typography variant="h6" sx={{ textAlign: 'center' }}>
             Inks
           </Typography>

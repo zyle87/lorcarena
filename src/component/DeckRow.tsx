@@ -33,13 +33,13 @@ const DeckRow: FC<Props> = ({ save, onDelete }) => {
         }
       }}
     >
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
         {save.inks.map((ink, index) => (
           <img
             key={index}
             src={`https://lorcana.gg/wp-content/uploads/sites/11/2023/11/${ink.toLowerCase()}-symbol.png`}
             alt={ink}
-            style={{ height: 32, marginRight: 8 }}
+            style={{ height: 48, marginRight: 8 }}
           />
         ))}
         <Typography variant="h6">{save.name}</Typography>

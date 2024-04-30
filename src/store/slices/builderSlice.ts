@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { inks } from '../../tools/const'
 import { Card, Ink } from '../../tools/types'
 
 export type BuilderState = {
@@ -27,6 +28,14 @@ export const builderSlice = createSlice({
   name: 'builder',
   initialState,
   reducers: {
+    randomizeInks: (state) => {
+      const firstInk = inks[Math.floor(Math.random() * inks.length)]
+      const secondInk = inks.filter((ink) => ink !== firstInk)[
+        Math.floor(Math.random() * (inks.length - 1))
+      ]
+
+      state.inks = [firstInk, secondInk]
+    },
     addInk: (state, action) => {
       state.inks.push(action.payload)
     },
