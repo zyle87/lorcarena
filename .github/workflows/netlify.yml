@@ -31,15 +31,10 @@ jobs:
           git config user.email "<>"
 
       - name: Strip "v" from tag name
-        run: echo "${{ github.event.release.tag_name }}"
-        id: strip_v
-        # Using replace filter to remove "v" from the beginning of the tag name
-        # Syntax: {{ string_var_name | replace: 'old_text', 'new_text' }}
-        env:
-          STRIPPED_TAG_NAME: ${{ github.event.release.tag_name | replace('v', '') }}
+        run: echo "STRIPPED_TAG_NAME=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Up version
-        run: yarn version --new-version ${{ env.STRIPPED_TAG_NAME }}"
+        run: yarn version --new-version ${{ env.STRIPPED_TAG_NAME }}
 
       - name: Forwards tag
         run: git tag -fa ${{ env.STRIPPED_TAG_NAME }}" -m"${{ env.STRIPPED_TAG_NAME }}""
