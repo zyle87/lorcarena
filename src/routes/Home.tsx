@@ -1,14 +1,14 @@
-import LayersIcon from '@mui/icons-material/LayersRounded';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import { FC, useState } from 'react';
-import ConfirmDeleteModal from '../component/ConfirmDeleteModal';
-import DeckRow from '../component/DeckRow';
-import NewDeckModal from '../component/NewDeckModal';
-import { useAppDispatch } from '../hooks/useAppDispatch';
-import { useAppSelector } from '../hooks/useAppSelector';
-import { builderActions } from '../store/slices/builderSlice';
+import LayersIcon from '@mui/icons-material/LayersRounded'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
+import { FC, useState } from 'react'
+import ConfirmDeleteModal from '../component/ConfirmDeleteModal'
+import DeckRow from '../component/DeckRow'
+import NewDeckModal from '../component/NewDeckModal'
+import { useAppDispatch } from '../hooks/useAppDispatch'
+import { useAppSelector } from '../hooks/useAppSelector'
+import { builderActions } from '../store/slices/builderSlice'
 
 const Home: FC = () => {
   const [newDeckModalOpen, setNewDeckModalOpen] = useState(false)
@@ -19,33 +19,31 @@ const Home: FC = () => {
 
   return (
     <Box>
-      {settings.saves.length > 0 && (
-        <Paper sx={{ mt: 2, p: 2 }}>
-          <Box>
-            {settings.saves.map((save) => (
+      <Paper sx={{ p: 2 }}>
+        <Box>
+          {settings.saves.map((save) => (
+            <Box key={save.id} mb={2}>
               <DeckRow
-                key={save.id}
                 save={save}
                 onDelete={(id) => {
                   setDeleteId(id)
                   setConfirmDeleteModalOpen(true)
                 }}
               />
-            ))}
-          </Box>
-          <Button
-            startIcon={<LayersIcon />}
-            onClick={() => {
-              setNewDeckModalOpen(true)
-              dispatch(builderActions.reset())
-            }}
-            sx={{ mt: 2 }}
-            fullWidth
-          >
-            Build a new arena deck
-          </Button>
-        </Paper>
-      )}
+            </Box>
+          ))}
+        </Box>
+        <Button
+          startIcon={<LayersIcon />}
+          onClick={() => {
+            setNewDeckModalOpen(true)
+            dispatch(builderActions.reset())
+          }}
+          fullWidth
+        >
+          Build a new arena deck
+        </Button>
+      </Paper>
       <NewDeckModal open={newDeckModalOpen} setOpen={setNewDeckModalOpen} />
       <ConfirmDeleteModal
         open={confirmDeleteModalOpen}
