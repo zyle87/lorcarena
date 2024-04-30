@@ -4,7 +4,7 @@ LorcaREna is a web application inspired by the concept of Hearthstone arenas, bu
 
 ## Prerequisites
 
-Because arena decks are singleton, you need to have one copy of each card from the selected sets in order to play.
+Because arena decks are singleton, you need to have only one copy of each card from the selected sets in order to play.
 
 ## Installation
 
