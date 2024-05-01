@@ -9,13 +9,15 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { builderActions } from '../store/slices/builderSlice'
 import { SettingsState } from '../store/slices/settingsSlice'
+import Button from '@mui/material/Button'
 
 type Props = {
   save: SettingsState['saves'][number]
+  onPixelborn: (id: Nullable<number>) => void
   onDelete: (id: Nullable<number>) => void
 }
 
-const DeckRow: FC<Props> = ({ save, onDelete }) => {
+const DeckRow: FC<Props> = ({ save, onPixelborn, onDelete }) => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
@@ -45,13 +47,21 @@ const DeckRow: FC<Props> = ({ save, onDelete }) => {
         <Typography variant="h6">{save.name}</Typography>
       </Box>
       <Box sx={{ display: 'flex' }}>
+        <Button
+          sx={{ mr: 1 }}
+          onClick={() => {
+            onPixelborn(save.id)
+          }}
+        >
+          Pixelborn
+        </Button>
         <IconButton
           onClick={() => {
             dispatch(builderActions.parse(save))
             navigate('/build')
           }}
-          title='Edit deck'
-          aria-label='Edit deck'
+          title="Edit deck"
+          aria-label="Edit deck"
         >
           <DrawIcon />
         </IconButton>
@@ -60,8 +70,8 @@ const DeckRow: FC<Props> = ({ save, onDelete }) => {
           onClick={() => {
             onDelete(save.id)
           }}
-          title='Delete deck'
-          aria-label='Delete deck'
+          title="Delete deck"
+          aria-label="Delete deck"
         >
           <DeleteIcon />
         </IconButton>

@@ -9,11 +9,13 @@ import NewDeckModal from '../component/NewDeckModal'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
+import PixelbornModal from '../component/PixelbornModal'
 
 const Home: FC = () => {
   const [newDeckModalOpen, setNewDeckModalOpen] = useState(false)
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false)
-  const [deleteId, setDeleteId] = useState<number | null>(null)
+  const [pixelbornModal, setPixelbornModal] = useState(false)
+  const [id, setId] = useState<number | null>(null)
   const settings = useAppSelector((state) => state.settings)
   const dispatch = useAppDispatch()
 
@@ -26,8 +28,12 @@ const Home: FC = () => {
               <DeckRow
                 save={save}
                 onDelete={(id) => {
-                  setDeleteId(id)
+                  setId(id)
                   setConfirmDeleteModalOpen(true)
+                }}
+                onPixelborn={(id) => {
+                  setId(id)
+                  setPixelbornModal(true)
                 }}
               />
             </Box>
@@ -35,7 +41,7 @@ const Home: FC = () => {
         </Box>
         <Button
           startIcon={<LayersIcon />}
-          variant='contained'
+          variant="contained"
           onClick={() => {
             setNewDeckModalOpen(true)
             dispatch(builderActions.reset())
@@ -48,7 +54,12 @@ const Home: FC = () => {
       <ConfirmDeleteModal
         open={confirmDeleteModalOpen}
         setOpen={setConfirmDeleteModalOpen}
-        id={deleteId}
+        id={id}
+      />
+      <PixelbornModal
+        open={pixelbornModal}
+        setOpen={setPixelbornModal}
+        id={id}
       />
     </Box>
   )
