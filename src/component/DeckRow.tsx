@@ -48,7 +48,7 @@ const DeckRow: FC<Props> = ({ save, onPixelborn, onDelete }) => {
       </Box>
       <Box sx={{ display: 'flex' }}>
         <Button
-          sx={{ mr: 2 }}
+          sx={{ mr: 1 }}
           onClick={() => {
             onPixelborn(save.id)
           }}

@@ -1,9 +1,9 @@
+import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import { FC } from 'react'
 import { useAppSelector } from '../hooks/useAppSelector'
-import Button from '@mui/material/Button'
 
 type Props = {
   open: boolean
@@ -32,7 +32,7 @@ const PixelbornModal: FC<Props> = ({ open, setOpen, id }) => {
           top: '50%',
           transform: 'translate(-50%, -50%)',
           width: 480,
-          maxWidth: '90%',
+          maxWidth: '90%'
         }}
       >
         <TextField
@@ -40,8 +40,15 @@ const PixelbornModal: FC<Props> = ({ open, setOpen, id }) => {
           multiline
           inputProps={{ readOnly: true }}
           value={btoa(base64!)}
+          maxRows={10}
         ></TextField>
-        <Button fullWidth sx={{ mt: 2 }}>
+        <Button
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={() => {
+            navigator.clipboard.writeText(btoa(base64!))
+          }}
+        >
           Copy
         </Button>
       </Paper>
