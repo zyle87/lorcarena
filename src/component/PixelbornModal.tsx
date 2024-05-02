@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import { FC } from 'react'
 import { useAppSelector } from '../hooks/useAppSelector'
+import { errata } from '../tools/errata'
 
 type Props = {
   open: boolean
