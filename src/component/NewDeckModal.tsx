@@ -15,6 +15,7 @@ import { useUpdateEffect } from 'react-use'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
+import { settingsActions } from '../store/slices/settingsSlice'
 import { inks } from '../tools/const'
 
 type Props = {
@@ -29,7 +30,7 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
 
   useUpdateEffect(() => {
     if (open) {
-      dispatch(builderActions.reset())
+      dispatch(builderActions.clear())
     }
   }, [open])
 
@@ -194,8 +195,11 @@ const NewDeckModal: FC<Props> = ({ open, setOpen }) => {
           fullWidth
           variant="contained"
           onClick={() => {
-            dispatch(builderActions.generateId())
-            navigate('/build')
+            const id = Date.now()
+
+            dispatch(builderActions.updateId(id))
+            dispatch(settingsActions.save({ ...builder, id }))
+            navigate(`/build/${id}`)
           }}
         >
           Confirm

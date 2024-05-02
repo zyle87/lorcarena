@@ -6,24 +6,24 @@ import { FC, useState } from 'react'
 import ConfirmDeleteModal from '../component/ConfirmDeleteModal'
 import DeckRow from '../component/DeckRow'
 import NewDeckModal from '../component/NewDeckModal'
+import PixelbornModal from '../component/PixelbornModal'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
 import { builderActions } from '../store/slices/builderSlice'
-import PixelbornModal from '../component/PixelbornModal'
 
 const Home: FC = () => {
   const [newDeckModalOpen, setNewDeckModalOpen] = useState(false)
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false)
   const [pixelbornModal, setPixelbornModal] = useState(false)
   const [id, setId] = useState<number | null>(null)
-  const settings = useAppSelector((state) => state.settings)
+  const saves = useAppSelector((state) => state.settings.saves)
   const dispatch = useAppDispatch()
 
   return (
     <Box>
       <Paper sx={{ p: 2, textAlign: 'center' }}>
         <Box>
-          {settings.saves.map((save) => (
+          {saves.map((save) => (
             <Box key={save.id} mb={2}>
               <DeckRow
                 save={save}
@@ -44,7 +44,7 @@ const Home: FC = () => {
           variant="contained"
           onClick={() => {
             setNewDeckModalOpen(true)
-            dispatch(builderActions.reset())
+            dispatch(builderActions.clear())
           }}
         >
           Build a new arena deck

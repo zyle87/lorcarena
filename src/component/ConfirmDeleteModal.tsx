@@ -3,11 +3,9 @@ import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
-import { FC } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { FC, useMemo } from 'react'
 import { useAppDispatch } from '../hooks/useAppDispatch'
 import { useAppSelector } from '../hooks/useAppSelector'
-import { builderActions } from '../store/slices/builderSlice'
 import { settingsActions } from '../store/slices/settingsSlice'
 
 type Props = {
@@ -20,13 +18,7 @@ const ConfirmDeleteModal: FC<Props> = ({ open, setOpen, id }) => {
   const dispatch = useAppDispatch()
   const saves = useAppSelector((state) => state.settings.saves)
 
-  useUpdateEffect(() => {
-    if (open) {
-      dispatch(builderActions.reset())
-    }
-  }, [open])
-
-  const deck = saves.find((save) => save.id === id)
+  const deck = useMemo(() => saves.find((save) => save.id === id), [saves, id])
 
   return (
     <Modal
