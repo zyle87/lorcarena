@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/07957b6f-68a0-4171-8fca-b0bc57d82c9d/deploy-status)](https://app.netlify.com/sites/lorcarena/deploys)
+
 # LorcaREna
 
 LorcaREna is a web application inspired by the concept of Hearthstone arenas, but adapted for the Lorcana universe. This application allows players to create limited/singleton decks, consisting of 40 cards with only one copy of each card.
