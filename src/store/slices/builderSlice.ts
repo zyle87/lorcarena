@@ -45,8 +45,8 @@ export const builderSlice = createSlice({
     removeInk: (state, action) => {
       state.inks = state.inks.filter((ink) => ink !== action.payload)
     },
-    generateId: (state) => {
-      state.id = Date.now()
+    updateId: (state, action) => {
+      state.id = action.payload
     },
     clearDraft: (state) => {
       state.draft = []
@@ -71,7 +71,7 @@ export const builderSlice = createSlice({
         state.sets.push(action.payload)
       }
     },
-    reset: () => initialState,
+    clear: () => initialState,
     parse: (_, action) => {
       return action.payload
     }

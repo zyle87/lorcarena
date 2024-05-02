@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: '/build',
+        path: '/build/:id',
         element: <DeckBuilder />
       }
     ]

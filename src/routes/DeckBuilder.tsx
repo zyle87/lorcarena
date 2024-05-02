@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
 import axios from 'axios'
 import { FC, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMount, useUpdateEffect } from 'react-use'
 import CardRow from '../component/CardRow'
 import VerticalBar from '../component/VerticalBar'
@@ -25,8 +25,10 @@ import { Card } from '../tools/types'
 const DeckBuilder: FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(-1)
   const builder = useAppSelector((state) => state.builder)
-  const dispatch = useAppDispatch()
+  const saves = useAppSelector((state) => state.settings.saves)
   const navigate = useNavigate()
+  let { id } = useParams<{ id: string }>()
+  const dispatch = useAppDispatch()
 
   const cardIsInDraftOrDeck = (setNum: number, cardNum: number) => {
     return (
@@ -65,11 +67,18 @@ const DeckBuilder: FC = () => {
   }
 
   useMount(() => {
+    const save = saves.find((save) => save.id === +id!)
+
+    if (!save) {
+      navigate('/')
+      return
+    }
+
+    dispatch(builderActions.parse(save))
+
     if (builder.draft.length < 3 && builder.deck.length < 40) {
       generateDraft()
     }
-
-    dispatch(settingsActions.save(builder))
   })
 
   useUpdateEffect(() => {

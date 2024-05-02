@@ -1,15 +1,13 @@
 import DeleteIcon from '@mui/icons-material/DeleteRounded'
 import DrawIcon from '@mui/icons-material/DrawRounded'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppDispatch } from '../hooks/useAppDispatch'
-import { builderActions } from '../store/slices/builderSlice'
 import { SettingsState } from '../store/slices/settingsSlice'
-import Button from '@mui/material/Button'
 
 type Props = {
   save: SettingsState['saves'][number]
@@ -18,7 +16,6 @@ type Props = {
 }
 
 const DeckRow: FC<Props> = ({ save, onPixelborn, onDelete }) => {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
   return (
@@ -52,13 +49,13 @@ const DeckRow: FC<Props> = ({ save, onPixelborn, onDelete }) => {
           onClick={() => {
             onPixelborn(save.id)
           }}
+          disabled={save.deck.length === 0}
         >
           Pixelborn
         </Button>
         <IconButton
           onClick={() => {
-            dispatch(builderActions.parse(save))
-            navigate('/build')
+            navigate(`/build/${save.id}`)
           }}
           title="Edit deck"
           aria-label="Edit deck"
