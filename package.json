@@ -1,7 +1,7 @@
 {
   "name": "lorcarena",
   "private": true,
-  "version": "1.2.0",
+  "version": "develop",
   "type": "module",
   "scripts": {
     "dev": "vite",

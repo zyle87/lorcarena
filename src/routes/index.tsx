@@ -1,9 +1,9 @@
-import { createHashRouter } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import DeckBuilder from './DeckBuilder'
 import Home from './Home'
 import Root from './Root'
 
-export const router = createHashRouter([
+export const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
