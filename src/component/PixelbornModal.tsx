@@ -18,7 +18,15 @@ const PixelbornModal: FC<Props> = ({ open, setOpen, id }) => {
 
   const base64 = save?.deck
     .map((card) => {
-      return `${card.Name.replace(' - ', '_')}$1`
+      let name = card.Name
+
+      errata.forEach((eratum) => {
+        name = name.replace(new RegExp(eratum.current, 'g'), eratum.corrected)
+      })
+
+      name.replace(' - ', '_')
+
+      return `${name}$1`
     })
     .join('|')
 
