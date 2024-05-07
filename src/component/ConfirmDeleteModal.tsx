@@ -51,6 +51,7 @@ const ConfirmDeleteModal: FC<Props> = ({ open, setOpen, id }) => {
           <Button
             color="error"
             variant="contained"
+            autoFocus
             onClick={() => {
               dispatch(settingsActions.removeSave(id!))
               setOpen(false)

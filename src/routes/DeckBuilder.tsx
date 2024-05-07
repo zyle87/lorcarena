@@ -7,8 +7,12 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import FormControl from '@mui/material/FormControl'
 import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
+import Select from '@mui/material/Select'
 import axios from 'axios'
 import { FC, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -24,6 +28,7 @@ import { Card } from '../tools/types'
 
 const DeckBuilder: FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(-1)
+  const [currentSortIndex, setCurrentSortIndex] = useState(0)
   const builder = useAppSelector((state) => state.builder)
   const saves = useAppSelector((state) => state.settings.saves)
   const navigate = useNavigate()
@@ -108,6 +113,52 @@ const DeckBuilder: FC = () => {
 
     return cards
   }
+
+  const categories = [
+    {
+      title: 'Characters',
+      filter: (card: Card) => card.Type === 'Character'
+    },
+    {
+      title: 'Items',
+      filter: (card: Card) => card.Type === 'Item'
+    },
+    {
+      title: 'Actions',
+      filter: (card: Card) => card.Type.includes('Action')
+    },
+    {
+      title: 'Locations',
+      filter: (card: Card) => card.Type === 'Location'
+    }
+  ]
+
+  const sorts = [
+    {
+      title: 'Cost',
+      sort: (a: Card, b: Card) => a.Cost - b.Cost
+    },
+    {
+      title: 'Set & Number',
+      sort: (a: Card, b: Card) => {
+        const setCompare = a.Set_Num - b.Set_Num
+
+        if (setCompare !== 0) {
+          return setCompare
+        }
+
+        return a.Card_Num - b.Card_Num
+      }
+    },
+    {
+      title: 'Color',
+      sort: (a: Card, b: Card) => a.Color.localeCompare(b.Color)
+    },
+    {
+      title: 'Rarity',
+      sort: (a: Card, b: Card) => a.Rarity.localeCompare(b.Rarity)
+    }
+  ]
 
   return (
     <Box>
@@ -287,15 +338,15 @@ const DeckBuilder: FC = () => {
           </Box>
         </Box>
       </Paper>
-      <Box sx={{ display: 'flex', mb: 2 }}>
+      <Box sx={{ display: 'flex', mb: 2, mx: -1 }}>
         <Paper
           sx={{
             padding: 2,
             position: 'relative',
             display: 'flex',
-            mr: 2,
             flex: 1,
-            justifyContent: 'center'
+            justifyContent: 'center',
+            mx: 1
           }}
         >
           <Box
@@ -309,7 +360,7 @@ const DeckBuilder: FC = () => {
               variant="h5"
               sx={{
                 position: 'absolute',
-                top: 8,
+                top: 11,
                 width: 48,
                 height: 48,
                 textAlign: 'center',
@@ -335,7 +386,7 @@ const DeckBuilder: FC = () => {
               variant="h5"
               sx={{
                 position: 'absolute',
-                top: 8,
+                top: 11,
                 width: 48,
                 height: 48,
                 textAlign: 'center',
@@ -357,7 +408,39 @@ const DeckBuilder: FC = () => {
             position: 'relative',
             display: 'flex',
             flex: 1,
-            justifyContent: 'center'
+            justifyContent: 'center',
+            mx: 1
+          }}
+        >
+          <FormControl fullWidth>
+            <InputLabel id="sort-label">Sort by</InputLabel>
+            <Select
+              labelId="sort-label"
+              label="Sort by"
+              value={currentSortIndex}
+            >
+              {sorts.map((sort, index) => (
+                <MenuItem
+                  key={index}
+                  value={index}
+                  onClick={() => {
+                    setCurrentSortIndex(index)
+                  }}
+                >
+                  {sort.title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Paper>
+        <Paper
+          sx={{
+            padding: 2,
+            position: 'relative',
+            display: 'flex',
+            flex: 1,
+            justifyContent: 'center',
+            mx: 1
           }}
         >
           {builder.inks.map((ink) => (
@@ -373,7 +456,7 @@ const DeckBuilder: FC = () => {
                 variant="h5"
                 sx={{
                   position: 'absolute',
-                  top: 8,
+                  top: 11,
                   width: 48,
                   height: 48,
                   textAlign: 'center',
@@ -392,66 +475,26 @@ const DeckBuilder: FC = () => {
         </Paper>
       </Box>
       <Box mb={4}>
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            {`Character (${
-              builder.deck.filter((card) => card.Type === 'Character').length
-            })`}
-          </AccordionSummary>
-          <AccordionDetails>
-            {builder.deck
-              .filter((card) => card.Type === 'Character')
-              .sort((a, b) => a.Cost - b.Cost)
-              .map((card) => (
-                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-              ))}
-          </AccordionDetails>
-        </Accordion>
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            {`Item (${
-              builder.deck.filter((card) => card.Type === 'Item').length
-            })`}
-          </AccordionSummary>
-          <AccordionDetails>
-            {builder.deck
-              .filter((card) => card.Type === 'Item')
-              .sort((a, b) => a.Cost - b.Cost)
-              .map((card) => (
-                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-              ))}
-          </AccordionDetails>
-        </Accordion>
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            {`Action (${
-              builder.deck.filter((card) => card.Type.includes('Action')).length
-            })`}
-          </AccordionSummary>
-          <AccordionDetails>
-            {builder.deck
-              .filter((card) => card.Type.includes('Action'))
-              .sort((a, b) => a.Cost - b.Cost)
-              .map((card) => (
-                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-              ))}
-          </AccordionDetails>
-        </Accordion>
-        <Accordion defaultExpanded>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            {`Location (${
-              builder.deck.filter((card) => card.Type === 'Location').length
-            })`}
-          </AccordionSummary>
-          <AccordionDetails>
-            {builder.deck
-              .filter((card) => card.Type === 'Location')
-              .sort((a, b) => a.Cost - b.Cost)
-              .map((card) => (
-                <CardRow key={`${card.Set_Num} ${card.Card_Num}`} card={card} />
-              ))}
-          </AccordionDetails>
-        </Accordion>
+        {categories.map((category, index) => (
+          <Accordion defaultExpanded key={index}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              {`${category.title} (${
+                builder.deck.filter(category.filter).length
+              })`}
+            </AccordionSummary>
+            <AccordionDetails>
+              {builder.deck
+                .filter(category.filter)
+                .sort(sorts[currentSortIndex].sort)
+                .map((card) => (
+                  <CardRow
+                    key={`${card.Set_Num} ${card.Card_Num}`}
+                    card={card}
+                  />
+                ))}
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </Box>
     </Box>
   )
